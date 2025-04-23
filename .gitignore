@@ -1,0 +1,34 @@
+# Jupyter notebook checkpoints
+**/.ipynb_checkpoints/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter notebook metadata
+*.nb-*
+
+# VS Code settings
+.vscode/
+
+# Hidden system files
+.DS_Store
+
+# Environment and dependency files
+.env
+.venv/
+venv/
+
+# Logs and outputs
+*.log
+*.out
+
+# Ignore model artifacts if any
+*.pkl
+*.joblib
+*.h5
+
+# Ignore local results
+results/
+output/
