@@ -91,63 +91,63 @@ for train_index, test_index in kf.split(x):
 # #############################################################################
 #######                          Model Tuning                           #######
 # #############################################################################
-### do not recommend ever uncommenting this, you do not want this to run, just here for evidence of tuning ##
+## do not recommend ever uncommenting this, you do not want this to run, just here for evidence of tuning ##
 
-#def create_model(optimizer='adam', learn_rate=0.01, momentum=0, init_mode='uniform', activation='relu', 
-#                    dropout_rate=0.0, weight_constraint=0, neurons1=1, neurons2=1):
-## create model
-#    model = Sequential()
-#    model.add(Dense(neurons1, input_dim=13, kernel_initializer=init_mode, activation=activation, kernel_constraint=max_norm(weight_constraint)))
-#    model.add(Dense(neurons2, kernel_initializer=init_mode, activation=activation, kernel_constraint=max_norm(weight_constraint)))
-#    model.add(Dropout(dropout_rate))
-#    model.add(Dense(1, activation='sigmoid'))
-#    
-#    # Compile model
-#    #adam = Adam(lr=learn_rate, momentum=momentum)
-#    #optimizer = SGD(lr=learn_rate, momentum=momentum)
-#    model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-#    return model
-#
-#model = KerasClassifier(build_fn=create_model, verbose=0)
-#
-## define the grid search parameters
-#batch_size = [10, 20, 40, 60, 80, 100]
-#epochs = [10, 50, 100, 300]
-#learn_rate = [0.001, 0.01, 0.1, 0.2, 0.3]
-#momentum = [0.0, 0.2, 0.4, 0.6, 0.8, 0.9]
-#init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
-#activation = ['softmax', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'linear']
-#weight_constraint = [1, 2, 3, 4, 5]
-#dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-#neurons1 = [1, 4, 8, 12, 16, 20, 24, 28]
-#neurons2 = [1, 2, 4, 6, 8]
-#param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, learn_rate=learn_rate, momentum=momentum, 
-#                    init_mode=init_mode, activation=activation, dropout_rate=dropout_rate, weight_constraint=weight_constraint, 
-#                    neurons1=neurons1, neurons2=neurons2)
-#grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=3)
-#grid_result = grid.fit(X_train, Y_train)
-#
-## summarize results
-#print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
-#means = grid_result.cv_results_['mean_test_score']
-#stds = grid_result.cv_results_['std_test_score']
-#params = grid_result.cv_results_['params']
-#for mean, stdev, param in zip(means, stds, params):
-#    print("%f (%f) with: %r" % (mean, stdev, param))
+def create_model(optimizer='adam', learn_rate=0.01, momentum=0, init_mode='uniform', activation='relu', 
+                   dropout_rate=0.0, weight_constraint=0, neurons1=1, neurons2=1):
+# create model
+   model = Sequential()
+   model.add(Dense(neurons1, input_dim=13, kernel_initializer=init_mode, activation=activation, kernel_constraint=max_norm(weight_constraint)))
+   model.add(Dense(neurons2, kernel_initializer=init_mode, activation=activation, kernel_constraint=max_norm(weight_constraint)))
+   model.add(Dropout(dropout_rate))
+   model.add(Dense(1, activation='sigmoid'))
+   
+   # Compile model
+   #adam = Adam(lr=learn_rate, momentum=momentum)
+   #optimizer = SGD(lr=learn_rate, momentum=momentum)
+   model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+   return model
+
+model = KerasClassifier(build_fn=create_model, verbose=0)
+
+# define the grid search parameters
+batch_size = [10, 20, 40, 60, 80, 100]
+epochs = [10, 50, 100, 300]
+learn_rate = [0.001, 0.01, 0.1, 0.2, 0.3]
+momentum = [0.0, 0.2, 0.4, 0.6, 0.8, 0.9]
+init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
+activation = ['softmax', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'linear']
+weight_constraint = [1, 2, 3, 4, 5]
+dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+neurons1 = [1, 4, 8, 12, 16, 20, 24, 28]
+neurons2 = [1, 2, 4, 6, 8]
+param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, learn_rate=learn_rate, momentum=momentum, 
+                   init_mode=init_mode, activation=activation, dropout_rate=dropout_rate, weight_constraint=weight_constraint, 
+                   neurons1=neurons1, neurons2=neurons2)
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=3)
+grid_result = grid.fit(X_train, Y_train)
+
+# summarize results
+print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
+means = grid_result.cv_results_['mean_test_score']
+stds = grid_result.cv_results_['std_test_score']
+params = grid_result.cv_results_['params']
+for mean, stdev, param in zip(means, stds, params):
+   print("%f (%f) with: %r" % (mean, stdev, param))
 
 
 # #############################################################################
 #######                      Build Final Model                          #######
 # #############################################################################
 
-    model = create_model()
+model = create_model()
     
-    print(model.summary())
+print(model.summary())
     
-    #Need these when the data is normalized
-    Y_train= np.asarray(Y_train) 
+#Need these when the data is normalized
+Y_train= np.asarray(Y_train) 
     
-    history=model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=300, batch_size=10, verbose = 10)
+history=model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=300, batch_size=10, verbose = 10)
 
 # #############################################################################
 #######                   Evaluate Final Model                          #######
