@@ -5,6 +5,7 @@ import numpy as np
 import seaborn as sn
 import matplotlib.pyplot as plt
 import eli5
+from IPython.display import display
 
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
@@ -31,7 +32,7 @@ clResults = pd.DataFrame(columns  = ['SVM1',  'SVM2',  'SVM3',  'SVM4',  'SVM5']
 kernels = ['linear', 'poly', 'rbf', 'sigmoid']
 
 #k folds split
-kf = KFold(5, True)
+kf = KFold(n_splits=5, shuffle=True)
 kf.get_n_splits(x)
 a = 0 
 for a in range (0,4):
@@ -67,7 +68,7 @@ for a in range (0,4):
         
         #Permutation Importance
         perm = PermutationImportance(model, random_state = 1).fit(X_test, Y_test)
-        eli5.show_weights(perm, feature_names = x_df.columns.tolist())
+        display(eli5.format_as_text(eli5.explain_weights(perm, feature_names=x_df.columns.tolist())))
 
     
     #calculate average over 5 trials
